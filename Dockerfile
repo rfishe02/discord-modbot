@@ -11,4 +11,6 @@ RUN npm install --production
 
 COPY . .
 
+RUN [ "node", "deploy-commands.js" ]
+
 CMD [ "node", "index.js" ]
