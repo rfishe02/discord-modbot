@@ -1,4 +1,6 @@
 const { Events } = require('discord.js');
+const sharp = require('sharp');
+const axios = require('axios');
 
 // Imports the Google Cloud client library
 const vision = require('@google-cloud/vision');
@@ -21,9 +23,24 @@ module.exports = {
                         const contentType = attachment.contentType;
                         if(contentType) {
                             if(contentType.includes("image")){
+                                
+                                // Convert the image to buffer and resize it
                                 const fileName = attachment.proxyURL;
-                                await client.safeSearchDetection(fileName).then(response => {
+                                const response = await axios.get(fileName,  { responseType: 'arraybuffer' })
+                                const buffer = Buffer.from(response.data, "utf-8")
+
+                                const resizedImage = await sharp(buffer)
+                                .resize(640, 480, {
+                                    fit: sharp.fit.contain,
+                                    withoutEnlargement: true
+                                })
+                                .toFormat('jpeg')
+                                .toBuffer();
+
+                                // Run safe search detection and build an array of flags
+                                await client.safeSearchDetection(resizedImage).then(response => {
                                     const detections = response[0].safeSearchAnnotation;
+                                    console.log(detections);
 
                                     if(detections) {
                                         const adultContent = detections.adult;
@@ -46,13 +63,13 @@ module.exports = {
                                         }
                                         const racyContent = detections.racy;
                                         if (racyContent) {
-                                            if (racyContent == 'UNKNOWN' || racyContent == "LIKELY" || racyContent == "VERY_LIKELY") {
+                                            if (racyContent == 'UNKNOWN' || racyContent == "VERY_LIKELY") {
                                                 contentDetected.push('racy');
                                             }
                                         }
                                     } else {
                                         // Possible issue reading thing?
-                                        contentDetected.push('none');
+                                        contentDetected.push('none-detected');
                                     }
                                 })
                                 .catch(err => {
@@ -64,16 +81,27 @@ module.exports = {
                         return contentDetected;
                     }));
 
+                    // Squish the detected flags, for output / judgement purposes
                     const flagSet = new Set(imageAttachmentFlags.reduce((accumulator, currentValue) => [...accumulator,...currentValue]));
- 
                     console.log(flagSet)
+
+                    if (flagSet.size > 0) {
+                        message.delete()
+                        .then(msg => console.log(`Deleted message from ${msg.author.username}`))
+                        .catch(console.error);
+                        
+                        message.channel.send(`Removed low quality post. Sorry ${message.author}.`)
+                        .then(msg => console.log(`Sent message: ${msg.content}`))
+                        .catch(console.error);
+
+                    }
     
                 }       
             }
      
             if (message.embeds){
                 if(message.embeds.length > 0){
-                    console.log(message.embeds);
+                    //console.log(message.embeds);
                 }
             }
 
