@@ -13,5 +13,7 @@ DISCORD_TOKEN=your-token-here
 
 This project uses Docker to run the application.
 
-`docker build --tag discord-modbot`
-`docker run discord-modbot`
+```
+docker build --tag discord-modbot
+docker run discord-modbot
+```
