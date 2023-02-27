@@ -1,6 +1,10 @@
 # discord-modbot
 
-## Setting up configuration files
+## Recommended bot configuration
+
+This application requires the `Privileged Gateway Intents` `SERVER MEMBERS` and `MESSAGE CONTENT`. These can be found in the application settings of the Discord developer portal.
+
+## Setting up application configuration files
 
 This project uses `.env` and `config.json` files to store confidential information like API keys. You will need to create your own.
 

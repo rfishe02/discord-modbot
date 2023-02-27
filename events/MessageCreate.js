@@ -3,10 +3,14 @@ const { Events } = require('discord.js');
 module.exports = {
 	name: Events.MessageCreate,
 	execute(message) {
-		console.log(message);
+		//console.log(message);
 
         if (message.attachments) {
-            console.log(message.attachments);
+            
+            message.attachments.forEach(function (attachment){
+                console.log(attachment)
+            })        
+
         }
  
         if (message.embeds){
