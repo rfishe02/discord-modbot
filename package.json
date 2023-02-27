@@ -1,0 +1,22 @@
+{
+  "name": "discord-modbot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rfishe02/discord-modbot.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rfishe02/discord-modbot/issues"
+  },
+  "homepage": "https://github.com/rfishe02/discord-modbot#readme",
+  "dependencies": {
+    "discord.js": "^14.7.1"
+  }
+}
