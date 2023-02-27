@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/rfishe02/discord-modbot#readme",
   "dependencies": {
-    "discord.js": "^14.7.1"
+    "discord.js": "^14.7.1",
+    "dotenv": "^16.0.3"
   }
 }
